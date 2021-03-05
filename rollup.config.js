@@ -27,7 +27,7 @@ function serve() {
   };
 }
 
-const demo = {
+const demo = () => ({
   input: "src/demo/demo.ts",
   output: {
     file: "demo/demo.js",
@@ -47,7 +47,7 @@ const demo = {
     serve(),
     livereload("demo"),
   ],
-};
+});
 
 const build = [
   {
@@ -72,6 +72,26 @@ const build = [
       terser(),
     ],
   },
+  {
+    input: "src/demo/demo.ts",
+    output: {
+      file: "demo/demo.js",
+      format: "iife",
+      sourcemap: false,
+    },
+    plugins: [
+      resolve({
+        browser: true,
+      }),
+      typescript({
+        sourceMap: false,
+        inlineSources: false,
+        target: "ES2019",
+        moduleResolution: "node",
+      }),
+      terser(),
+    ],
+  },
 ];
 
-export default DEV_MODE ? demo : build;
+export default DEV_MODE ? demo() : build;
