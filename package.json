@@ -1,0 +1,20 @@
+{
+  "name": "p5.webserial",
+  "version": "0.0.1",
+  "description": "",
+  "main": "build/p5.webserial.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv demo --host -p 8000"
+  },
+  "author": "Jordan Yoon-Buck",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "@rollup/plugin-typescript": "^8.2.0",
+    "@types/w3c-web-serial": "^1.0.1",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}
