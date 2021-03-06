@@ -6,17 +6,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>P5 WebSerial Demo</title>
     <style>
-      textarea {
+      html {
+        height: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 1rem;
+      }
+      pre {
+        flex: 1;
         width: 100%;
-        height: 20rem;
+        overflow: auto;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        padding: 0.25rem;
+        border-radius: 2px;
+        box-sizing: border-box;
+        margin: 0.5rem 0;
+      }
+      .f {
+        display: flex;
+        gap: 0.5rem;
+      }
+      input,
+      .sp {
+        flex: 1;
       }
     </style>
   </head>
   <body>
-    <textarea id="t"></textarea>
-    <br />
-    <button id="c">clear</button>
-    <button id="s">connect</button>
+    <div class="f">
+      <button id="request">request</button>
+      <button id="open">open</button>
+      <button id="close">close</button>
+      <select id="baud">
+        <option>300</option>
+        <option>600</option>
+        <option>1200</option>
+        <option>2400</option>
+        <option>4800</option>
+        <option selected>9600</option>
+        <option>14400</option>
+        <option>19200</option>
+        <option>28800</option>
+        <option>38400</option>
+        <option>57600</option>
+        <option>115200</option>
+      </select>
+      <div class="sp"></div>
+      <select id="mode">
+        <option selected>line</option>
+        <option>char</option>
+        <option>byte</option>
+      </select>
+      <button id="clear">clear</button>
+    </div>
+    <pre id="console"></pre>
+    <div class="f">
+      <input type="text" id="input" />
+      <select id="lineending">
+        <option value="0">none</option>
+        <option value="1">\n</option>
+        <option value="2" selected>\r\n</option>
+      </select>
+      <button id="send">send</button>
+    </div>
 
     <script src="demo.js"></script>
   </body>

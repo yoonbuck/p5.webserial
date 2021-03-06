@@ -49,11 +49,11 @@ const demo = () => ({
   ],
 });
 
-const build = [
+const build = () => [
   {
     input: "src/main.ts",
     output: {
-      file: "bin/p5.webserial.js",
+      file: "build/p5.webserial.js",
       format: "umd",
       name: "p5.WebSerial",
       exports: "auto",
@@ -94,4 +94,4 @@ const build = [
   },
 ];
 
-export default DEV_MODE ? demo() : build;
+export default DEV_MODE ? demo() : build();

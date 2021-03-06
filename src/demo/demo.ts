@@ -1,56 +1,116 @@
 import WebSerial from "../main";
 
-const $t = document.getElementById("t");
-const $c = document.getElementById("c");
-const $s = document.getElementById("s");
+const SCROLLBACK = -2500;
 
-function print(msg) {
-  $t.textContent += msg + "\n";
-  $t.scrollTop = $t.scrollHeight;
+const $console = document.getElementById("console");
+const $clearbtn = document.getElementById("clear");
+const $requestbtn = document.getElementById("request");
+const $openbtn = document.getElementById("open");
+const $closebtn = document.getElementById("close");
+const $text = document.getElementById("input") as HTMLInputElement;
+const $lineEnding = document.getElementById("lineending") as HTMLSelectElement;
+const $mode = document.getElementById("mode") as HTMLSelectElement;
+const $baud = document.getElementById("baud") as HTMLSelectElement;
+const $sendbtn = document.getElementById("send");
+
+function println(msg: string) {
+  print(msg + "\n");
+}
+function print(msg: string) {
+  $console.textContent = ($console.textContent + msg).substr(SCROLLBACK);
+  $console.scrollTo($console.scrollLeft, 100000);
 }
 
-$c.addEventListener("click", function () {
-  $t.textContent = "";
+$clearbtn.addEventListener("click", function () {
+  $console.textContent = "";
 });
 
 if (WebSerial.checkSupport()) {
-  print("WebSerial support available");
+  println("WebSerial support available");
 } else {
-  print("WebSerial not supported!");
+  println("WebSerial not supported!");
 }
 
 const serial = new WebSerial();
 
 serial.getPorts();
 serial.on("noport", () => {
-  print("No ports available. Click connect to choose a port");
+  println("No ports available. Click request to choose a port");
 });
 
 serial.on("portavailable", (info: SerialPortInfo) => {
-  print("Using port:");
-  print("  Product ID: " + info.usbProductId.toString(16));
-  print("  Vendor ID:  " + info.usbVendorId.toString(16));
-  print("Opening...");
-  serial.open();
+  println("Found port:");
+  println("  Product ID: " + info.usbProductId.toString(16));
+  println("  Vendor ID:  " + info.usbVendorId.toString(16));
+  println("Click open to connect to this port");
+});
+
+$openbtn.addEventListener("click", function () {
+  println("Opening port...");
+  serial.open({ baudRate: parseInt($baud.value) });
+});
+
+$closebtn.addEventListener("click", function () {
+  println("Closing port...");
+  serial.close();
 });
 
 serial.on("open", () => {
-  print("opened!");
+  println("Port opened!");
+});
+
+serial.on("close", () => {
+  println("Port closed!");
 });
 
 serial.on("data", () => {
-  let line = serial.readLine();
-  if (line) {
-    print(line);
-    $t.textContent = $t.textContent.substr(-1000);
+  let mode = $mode.value;
+  if (mode === "line") {
+    let line = serial.readLine();
+    if (line) println(line);
+  } else if (mode === "char") {
+    while (serial.available()) print(serial.readChar());
+  } else {
+    while (serial.available()) println(bytestr(serial.read()));
   }
 });
 
-serial.on("readerror", (err) => {
-  print("READ ERROR! See details in console");
+serial.on("requesterror", (e: CustomEvent) => {
+  println("Request error.");
+});
+
+serial.on("error", (err: Error) => {
+  println("Error: " + err.message);
   console.error(err);
 });
 
-$s.addEventListener("click", function () {
+$requestbtn.addEventListener("click", function () {
   serial.requestPort();
+});
+
+function bytestr(e: number) {
+  return ("0" + e.toString(16)).substr(-2);
+}
+
+function le(e: string) {
+  if (e === "2") {
+    return "\r\n";
+  } else if (e === "1") {
+    return "\n";
+  } else {
+    return "";
+  }
+}
+
+function send() {
+  serial.print($text.value + le($lineEnding.value));
+  $text.value = "";
+}
+
+$sendbtn.addEventListener("click", send);
+$text.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    send();
+  }
 });

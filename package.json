@@ -1,7 +1,7 @@
 {
-  "name": "p5.webserial",
+  "name": "p5-webserial",
   "version": "0.0.1",
-  "description": "",
+  "description": "P5 friendly WebSerial library",
   "main": "build/p5.webserial.js",
   "scripts": {
     "build": "rollup -c",
@@ -19,5 +19,13 @@
     "rollup-plugin-terser": "^7.0.2",
     "tslib": "^2.1.0",
     "typescript": "^4.2.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yoonbuck/p5.WebSerial.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yoonbuck/p5.WebSerial/issues"
+  },
+  "homepage": "https://github.com/yoonbuck/p5.WebSerial#readme"
 }
