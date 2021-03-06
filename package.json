@@ -1,6 +1,6 @@
 {
   "name": "p5-webserial",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "P5 friendly WebSerial library",
   "main": "build/p5.webserial.js",
   "module": "build/p5.webserial.js",
