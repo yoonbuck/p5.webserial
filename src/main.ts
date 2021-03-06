@@ -21,24 +21,23 @@ const callbackMap = new WeakMap<
 >();
 
 export default class WebSerial {
-  serialBuffer: number[] = [];
+  private serialBuffer: number[] = [];
   serialConnected = false;
-  serialPort: string;
   portOpen = false;
-  shouldClose = false;
-  isOpening = false;
+  private shouldClose = false;
+  private isOpening = false;
 
-  lineEnding: LineEnding = "\r\n";
+  private lineEnding: LineEnding = "\r\n";
 
   portInfo: SerialPortInfo;
   port: SerialPort;
 
-  writer: WritableStreamDefaultWriter<Uint8Array>;
+  private writer: WritableStreamDefaultWriter<Uint8Array>;
 
-  emitter = new EventTarget();
-  encoder = new TextEncoder();
+  private emitter = new EventTarget();
+  private encoder = new TextEncoder();
 
-  async requestPort(filters: SerialPortFilter[] = [{ usbVendorId: 0x2341 }]) {
+  async requestPort(filters: SerialPortFilter[] = []) {
     try {
       this.port = await navigator.serial.requestPort({ filters });
       this.portInfo = this.port.getInfo();

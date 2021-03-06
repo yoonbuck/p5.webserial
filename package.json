@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "P5 friendly WebSerial library",
   "main": "build/p5.webserial.js",
+  "module": "build/p5.webserial.js",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
