@@ -1,5 +1,3 @@
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
-
 type WebSerialEvent =
   | "noport"
   | "portavailable"
@@ -22,7 +20,6 @@ const callbackMap = new WeakMap<
 
 export default class WebSerial {
   private serialBuffer: number[] = [];
-  serialConnected = false;
   portOpen = false;
   private shouldClose = false;
   private isOpening = false;
@@ -90,7 +87,7 @@ export default class WebSerial {
     }
   }
 
-  async close() {
+  close() {
     if (!this.portOpen) {
       return this.emit("closeerror", new Error("Port is already closed."));
     }
